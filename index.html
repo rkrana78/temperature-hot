@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url(images/bg-image.jpg) no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form class="col-md-6 m-auto py-5">
+            <div class="input-group mb-3">
+                <input id="enter-city" type="text" class="form-control" placeholder="Enter a location for Weather ...">
+                <div class="input-group-append">
+                    <button onclick="temperature()" type="button" class="btn btn-danger">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="weather-status text-white text-center">
+            <img id="weather-icon" src="https://openweathermap.org/img/wn/02d@2x.png" alt="">
+            <h1 id="location-name">Dhaka</h1>
+            <h3><span id="display-temp">38.06</span>&deg;C</h3>
+            <h1 id="details" class="lead">Clouds</h1>
+        </div>
+    </div>
+    <script>
+        function temperature(){
+            const cityName = document.getElementById('enter-city').value;
+            fetch('http://api.openweathermap.org/data/2.5/weather?q=' + cityName + '&APPID=ed3b2bba999b2c9482c06d6f11a9e506')
+            .then(response => response.json())
+            .then(data => {
+                const locationName = data.name;
+                document.getElementById('location-name').innerText = locationName;
+                const cityTemperature = data.main.temp;
+                const temptoCelsius = cityTemperature - 273.15;
+                document.getElementById('display-temp').innerText = temptoCelsius.toFixed(0);
+                const weatherDetails = data.weather[0].main;
+                document.getElementById('details').innerText = weatherDetails;
+                const cloudCondition = data.weather[0].icon;
+                const cloudImage = document.getElementById('weather-icon');
+                cloudImage.src = "https://openweathermap.org/img/w/" + cloudCondition + ".png";          
+            })
+        }
+    </script>
+</body>
+
+</html>
